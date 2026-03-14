@@ -171,15 +171,28 @@ export default function Portfolio() {
                     <ArrowUpRight className="h-3 w-3 text-muted-foreground transition-all group-hover:text-primary md:h-4 md:w-4" />
                   </div>
                   <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
-                    {content.projects.slice(0, 3).map((project, i) => (
-                      <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary/50 p-1.5 md:gap-3 md:p-2">
-                        <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/30 to-primary/5 md:h-10 md:w-10" />
-                        <div className="flex-1 min-w-0">
-                          <p className="truncate text-xs font-medium md:text-sm">{project.title}</p>
-                          <p className="text-[10px] text-muted-foreground md:text-xs">{project.category}</p>
+                    {content.projects.slice(0, 3).map((project, i) => {
+                      const firstImage = project.images?.[0] || project.thumbnail
+                      return (
+                        <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary/50 p-1.5 md:gap-3 md:p-2">
+                          <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/30 to-primary/5 md:h-10 md:w-10">
+                            {firstImage && (
+                              <img 
+                                src={firstImage} 
+                                alt={project.title}
+                                className="h-full w-full object-cover"
+                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="truncate text-xs font-medium md:text-sm">{project.title}</p>
+                            <p className="text-[10px] text-muted-foreground md:text-xs">{project.category}</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </motion.div>
 
@@ -304,110 +317,122 @@ export default function Portfolio() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex h-full w-full items-center justify-center px-4 md:px-8"
+            className="flex h-full w-full flex-col px-4 pt-14 pb-12 md:px-8 md:pt-16 md:pb-14"
           >
-            <div className="grid h-full w-full max-w-5xl grid-cols-1 gap-4 py-14 md:grid-cols-2 md:gap-8 md:py-16">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
+            <div className="mx-auto w-full max-w-5xl">
+              {/* Static Header */}
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.6 }}
-                className="flex flex-col justify-center"
+                className="font-display text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl"
               >
-                <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                  About<span className="text-primary">.</span>
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:mt-4 md:text-base">
-                  {content.about.bio}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
-                  {content.about.secondaryBio}
-                </p>
-                <div className="mt-4 grid grid-cols-3 gap-3 md:mt-6 md:gap-4">
-                  <div className="rounded-xl bg-card p-3 text-center md:p-4">
-                    <p className="font-display text-2xl font-bold text-primary md:text-3xl">{content.about.yearsExperience}</p>
-                    <p className="mt-0.5 text-[10px] text-muted-foreground md:text-xs">Years</p>
+                About<span className="text-primary">.</span>
+              </motion.h2>
+            </div>
+            
+            {/* Scrollable Content */}
+            <div className="mt-4 flex-1 overflow-y-auto md:mt-6">
+              <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.15, duration: 0.6 }}
+                  className="flex flex-col"
+                >
+                  <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
+                    {content.about.bio}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
+                    {content.about.secondaryBio}
+                  </p>
+                  <div className="mt-4 grid grid-cols-3 gap-3 md:mt-6 md:gap-4">
+                    <div className="rounded-xl bg-card p-3 text-center md:p-4">
+                      <p className="font-display text-2xl font-bold text-primary md:text-3xl">{content.about.yearsExperience}</p>
+                      <p className="mt-0.5 text-[10px] text-muted-foreground md:text-xs">Years</p>
+                    </div>
+                    <div className="rounded-xl bg-card p-3 text-center md:p-4">
+                      <p className="font-display text-2xl font-bold text-primary md:text-3xl">{content.about.projectsCompleted}</p>
+                      <p className="mt-0.5 text-[10px] text-muted-foreground md:text-xs">Projects</p>
+                    </div>
+                    <div className="rounded-xl bg-card p-3 text-center md:p-4">
+                      <p className="font-display text-2xl font-bold text-primary md:text-3xl">{content.about.totalClients}</p>
+                      <p className="mt-0.5 text-[10px] text-muted-foreground md:text-xs">Clients</p>
+                    </div>
                   </div>
-                  <div className="rounded-xl bg-card p-3 text-center md:p-4">
-                    <p className="font-display text-2xl font-bold text-primary md:text-3xl">{content.about.projectsCompleted}</p>
-                    <p className="mt-0.5 text-[10px] text-muted-foreground md:text-xs">Projects</p>
-                  </div>
-                  <div className="rounded-xl bg-card p-3 text-center md:p-4">
-                    <p className="font-display text-2xl font-bold text-primary md:text-3xl">{content.about.totalClients}</p>
-                    <p className="mt-0.5 text-[10px] text-muted-foreground md:text-xs">Clients</p>
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="flex flex-col justify-center gap-3 md:gap-4"
-              >
-                {/* Client Reviews */}
-                {content.reviews.length > 0 && (
-                  <div className="rounded-xl border border-border bg-card p-4 md:rounded-2xl md:p-5">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">Client Reviews</h3>
-                      <div className="flex gap-0.5">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="h-3 w-3 fill-primary text-primary md:h-3.5 md:w-3.5" />
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="flex flex-col gap-3 md:gap-4"
+                >
+                  {/* Client Reviews */}
+                  {content.reviews.length > 0 && (
+                    <div className="rounded-xl border border-border bg-card p-4 md:rounded-2xl md:p-5">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">Client Reviews</h3>
+                        <div className="flex gap-0.5">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-3 w-3 fill-primary text-primary md:h-3.5 md:w-3.5" />
+                          ))}
+                        </div>
+                      </div>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeReview}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-3"
+                        >
+                          <p className="text-xs italic leading-relaxed text-foreground/80 md:text-sm">
+                            "{content.reviews[activeReview]?.text}"
+                          </p>
+                          <div className="mt-2 flex items-center gap-2 md:mt-3">
+                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/20 text-[10px] font-bold text-primary md:h-8 md:w-8 md:text-xs">
+                              {content.reviews[activeReview]?.avatar}
+                            </div>
+                            <div>
+                              <p className="text-xs font-medium md:text-sm">{content.reviews[activeReview]?.name}</p>
+                              <p className="text-[10px] text-muted-foreground md:text-xs">{content.reviews[activeReview]?.company}</p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                      <div className="mt-3 flex gap-1.5">
+                        {content.reviews.map((_, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setActiveReview(i)}
+                            className={`h-1 rounded-full transition-all ${
+                              i === activeReview ? "w-5 bg-primary" : "w-1 bg-border hover:bg-muted-foreground"
+                            }`}
+                          />
                         ))}
                       </div>
                     </div>
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={activeReview}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="mt-3"
-                      >
-                        <p className="text-xs italic leading-relaxed text-foreground/80 md:text-sm">
-                          "{content.reviews[activeReview]?.text}"
-                        </p>
-                        <div className="mt-2 flex items-center gap-2 md:mt-3">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/20 text-[10px] font-bold text-primary md:h-8 md:w-8 md:text-xs">
-                            {content.reviews[activeReview]?.avatar}
-                          </div>
-                          <div>
-                            <p className="text-xs font-medium md:text-sm">{content.reviews[activeReview]?.name}</p>
-                            <p className="text-[10px] text-muted-foreground md:text-xs">{content.reviews[activeReview]?.company}</p>
+                  )}
+
+                  {/* Career Timeline */}
+                  <div className="rounded-xl border border-border bg-card p-4 md:rounded-2xl md:p-5">
+                    <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">Career Timeline</h3>
+                    <div className="mt-3 max-h-[200px] space-y-3 overflow-y-auto md:max-h-[250px]">
+                      {content.experience.map((exp, i) => (
+                        <div key={i} className="relative flex items-start gap-3 pl-3">
+                          <div className="absolute left-0 top-1.5 h-1.5 w-1.5 rounded-full bg-primary md:h-2 md:w-2" />
+                          <div className={i < content.experience.length - 1 ? "border-l border-border/50 pb-3 pl-3" : "pl-3"}>
+                            <p className="text-xs font-medium md:text-sm">{exp.role}</p>
+                            <p className="text-[10px] text-muted-foreground md:text-xs">{exp.company} &bull; {exp.period}</p>
                           </div>
                         </div>
-                      </motion.div>
-                    </AnimatePresence>
-                    <div className="mt-3 flex gap-1.5">
-                      {content.reviews.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setActiveReview(i)}
-                          className={`h-1 rounded-full transition-all ${
-                            i === activeReview ? "w-5 bg-primary" : "w-1 bg-border hover:bg-muted-foreground"
-                          }`}
-                        />
                       ))}
                     </div>
                   </div>
-                )}
-
-                {/* Career Timeline */}
-                <div className="rounded-xl border border-border bg-card p-4 md:rounded-2xl md:p-5">
-                  <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">Career Timeline</h3>
-                  <div className="mt-3 space-y-3">
-                    {content.experience.map((exp, i) => (
-                      <div key={i} className="relative flex items-start gap-3 pl-3">
-                        <div className="absolute left-0 top-1.5 h-1.5 w-1.5 rounded-full bg-primary md:h-2 md:w-2" />
-                        <div className={i < content.experience.length - 1 ? "border-l border-border/50 pb-3 pl-3" : "pl-3"}>
-                          <p className="text-xs font-medium md:text-sm">{exp.role}</p>
-                          <p className="text-[10px] text-muted-foreground md:text-xs">{exp.company} &bull; {exp.period}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </div>
             </div>
           </motion.main>
         )}
@@ -432,56 +457,80 @@ export default function Portfolio() {
               </motion.h2>
               
               <div className="mt-4 md:mt-6">
-                {content.projects.map((project, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15 + i * 0.08, duration: 0.6 }}
-                    className="border-b border-border"
-                  >
-                    <button
-                      onClick={() => setExpandedProject(expandedProject === i ? null : i)}
-                      className="group flex w-full items-center justify-between py-3 transition-colors hover:text-primary md:py-4"
+                {content.projects.map((project, i) => {
+                  const firstImage = project.images?.[0] || project.thumbnail
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 + i * 0.08, duration: 0.6 }}
+                      className="border-b border-border"
                     >
-                      <div className="flex items-center gap-3 md:gap-5">
-                        <span className="font-mono text-[10px] text-muted-foreground md:text-xs">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/30 to-primary/5 md:h-14 md:w-14 md:rounded-xl" />
-                        <div className="text-left">
-                          <h3 className="font-display text-sm font-medium transition-colors group-hover:text-primary md:text-xl">
-                            {project.title}
-                          </h3>
-                          <p className="text-[10px] text-muted-foreground md:text-sm">{project.category} &bull; {project.year}</p>
+                      <button
+                        onClick={() => setExpandedProject(expandedProject === i ? null : i)}
+                        className="group flex w-full items-center justify-between py-3 transition-colors hover:text-primary md:py-4"
+                      >
+                        <div className="flex items-center gap-3 md:gap-5">
+                          <span className="font-mono text-[10px] text-muted-foreground md:text-xs">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/30 to-primary/5 md:h-14 md:w-14 md:rounded-xl">
+                            {firstImage && (
+                              <img 
+                                src={firstImage} 
+                                alt={project.title}
+                                className="h-full w-full object-cover"
+                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
+                              />
+                            )}
+                          </div>
+                          <div className="text-left">
+                            <h3 className="font-display text-sm font-medium transition-colors group-hover:text-primary md:text-xl">
+                              {project.title}
+                            </h3>
+                            <p className="text-[10px] text-muted-foreground md:text-sm">{project.category} &bull; {project.year}</p>
+                          </div>
                         </div>
-                      </div>
-                      <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform md:h-5 md:w-5 ${
-                        expandedProject === i ? "rotate-180" : ""
-                      }`} />
-                    </button>
-                    
-                    <AnimatePresence>
-                      {expandedProject === i && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="pb-4 pl-10 md:pl-16">
-                            {/* Project Images */}
-                            <div className="flex gap-2 overflow-x-auto pb-3 md:gap-3">
-                              {[1, 2, 3].map((_, imgIndex) => (
-                                <div 
-                                  key={imgIndex} 
-                                  className="h-24 w-36 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 md:h-32 md:w-48 md:rounded-xl"
-                                />
-                              ))}
-                            </div>
-                            
-                            {/* Project Description */}
+                        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform md:h-5 md:w-5 ${
+                          expandedProject === i ? "rotate-180" : ""
+                        }`} />
+                      </button>
+                      
+                      <AnimatePresence>
+                        {expandedProject === i && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pb-4 pl-10 md:pl-16">
+                              {/* Project Images */}
+                              <div className="flex gap-2 overflow-x-auto pb-3 md:gap-3">
+                                {project.images && project.images.length > 0 ? (
+                                  project.images.map((imgUrl, imgIndex) => (
+                                    <div 
+                                      key={imgIndex} 
+                                      className="h-24 w-36 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 md:h-32 md:w-48 md:rounded-xl"
+                                    >
+                                      <img 
+                                        src={imgUrl} 
+                                        alt={`${project.title} - Image ${imgIndex + 1}`}
+                                        className="h-full w-full object-cover"
+                                        crossOrigin="anonymous"
+                                        referrerPolicy="no-referrer"
+                                      />
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div className="h-24 w-36 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 md:h-32 md:w-48 md:rounded-xl" />
+                                )}
+                              </div>
+                              
+                              {/* Project Description */}
                             <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground md:mt-3 md:text-sm">
                               {project.description}
                             </p>
@@ -517,9 +566,10 @@ export default function Portfolio() {
                           </div>
                         </motion.div>
                       )}
-                    </AnimatePresence>
-                  </motion.div>
-                ))}
+                      </AnimatePresence>
+                    </motion.div>
+                  )
+                })}
               </div>
             </div>
           </motion.main>

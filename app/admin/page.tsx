@@ -682,12 +682,17 @@ export default function AdminDashboard() {
                           />
                         </div>
                         <div className="space-y-1.5 md:col-span-2">
-                          <Label className="text-xs">Image URLs (comma separated)</Label>
-                          <Input
+                          <Label className="text-xs">Image URLs (comma separated - first image is used as icon)</Label>
+                          <Textarea
                             value={project.images.join(", ")}
-                            onChange={(e) => updateProject(index, "images", e.target.value.split(", ").filter(d => d.trim()))}
-                            className="h-8 text-sm"
+                            onChange={(e) => updateProject(index, "images", e.target.value.split(",").map(url => url.trim()).filter(d => d))}
+                            rows={2}
+                            placeholder="https://example.com/image1.jpg, https://drive.google.com/..., https://example.com/image3.jpg"
+                            className="text-sm"
                           />
+                          <p className="text-[10px] text-muted-foreground">
+                            Supports any image URL including Google Drive (use direct links). Separate multiple URLs with commas.
+                          </p>
                         </div>
                       </div>
                       <Button
