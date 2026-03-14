@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, User, Eye, EyeOff, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useContent } from "@/context/content-context"
 
 interface TermsDialogProps {
   isOpen: boolean
@@ -16,6 +17,7 @@ const ADMIN_PASSWORD = "Sianai4life@123"
 
 export function TermsDialog({ isOpen, onClose }: TermsDialogProps) {
   const router = useRouter()
+  const { content } = useContent()
   const [showAdminLogin, setShowAdminLogin] = useState(false)
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -82,78 +84,15 @@ export function TermsDialog({ isOpen, onClose }: TermsDialogProps) {
             {/* Content */}
             <div className="flex-1 overflow-y-auto px-4 py-4 md:px-6">
               <div className="space-y-4 text-sm text-muted-foreground">
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">1. Introduction</h3>
-                  <p>
-                    Welcome to Leon C. Tyes Portfolio. By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">2. Intellectual Property Rights</h3>
-                  <p>
-                    All content displayed on this portfolio, including but not limited to designs, graphics, text, logos, images, and audio clips, is the property of Leon C. Tyes unless otherwise stated. Unauthorized use, reproduction, or distribution of any content is strictly prohibited.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">3. Use License</h3>
-                  <p>
-                    Permission is granted to temporarily view the materials (information or software) on this website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">4. Portfolio Content</h3>
-                  <p>
-                    The projects showcased in this portfolio represent work completed for various clients. Some projects may be displayed with client permission, while others may be personal or conceptual work. The level of detail shared about each project respects confidentiality agreements.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">5. Contact and Communication</h3>
-                  <p>
-                    When you contact through the provided email or social media links, you agree that any information shared will be used solely for the purpose of professional communication and potential collaboration.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">6. Disclaimer</h3>
-                  <p>
-                    The materials on this website are provided on an 'as is' basis. Leon C. Tyes makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">7. Limitations</h3>
-                  <p>
-                    In no event shall Leon C. Tyes or suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on this website.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">8. Revisions and Updates</h3>
-                  <p>
-                    The materials appearing on this website could include technical, typographical, or photographic errors. Leon C. Tyes does not warrant that any of the materials are accurate, complete or current. Changes may be made to the materials contained on the website at any time without notice.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">9. Links</h3>
-                  <p>
-                    This website may contain links to external sites that are not operated by Leon C. Tyes. Please be aware that there is no control over the content and practices of these sites, and cannot accept responsibility for their respective privacy policies.
-                  </p>
-                </section>
-
-                <section>
-                  <h3 className="mb-2 font-semibold text-foreground">10. Governing Law</h3>
-                  <p>
-                    These terms and conditions are governed by and construed in accordance with applicable laws and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
-                  </p>
-                </section>
+                {content.terms?.sections?.map((section, index) => (
+                  <section key={index}>
+                    <h3 className="mb-2 font-semibold text-foreground">{section.title}</h3>
+                    <p>{section.content}</p>
+                  </section>
+                ))}
 
                 <p className="pt-2 text-xs text-muted-foreground/60">
-                  Last updated: January 2024
+                  Last updated: {content.terms?.lastUpdated || "January 2024"}
                 </p>
               </div>
             </div>

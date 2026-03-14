@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { 
   ArrowLeft, Save, Plus, Trash2, RotateCcw, 
-  User, Briefcase, FolderOpen, MessageSquare, Wrench, Code, ChevronDown, ChevronUp
+  User, Briefcase, FolderOpen, MessageSquare, Wrench, Code, ChevronDown, ChevronUp, FileText
 } from "lucide-react"
 import { 
   useContent, 
@@ -13,7 +13,8 @@ import {
   type Experience, 
   type Review, 
   type Software,
-  type PortfolioContent 
+  type PortfolioContent,
+  type TermsSection
 } from "@/context/content-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -222,6 +223,44 @@ export default function AdminDashboard() {
     }))
   }
 
+  // Terms handlers
+  const updateTermsLastUpdated = (value: string) => {
+    setEditedContent(prev => ({
+      ...prev,
+      terms: { ...prev.terms, lastUpdated: value }
+    }))
+  }
+
+  const addTermsSection = () => {
+    setEditedContent(prev => ({
+      ...prev,
+      terms: {
+        ...prev.terms,
+        sections: [...(prev.terms?.sections || []), { title: "New Section", content: "Section content" }]
+      }
+    }))
+  }
+
+  const updateTermsSection = (index: number, field: keyof TermsSection, value: string) => {
+    setEditedContent(prev => ({
+      ...prev,
+      terms: {
+        ...prev.terms,
+        sections: prev.terms.sections.map((s, i) => i === index ? { ...s, [field]: value } : s)
+      }
+    }))
+  }
+
+  const removeTermsSection = (index: number) => {
+    setEditedContent(prev => ({
+      ...prev,
+      terms: {
+        ...prev.terms,
+        sections: prev.terms.sections.filter((_, i) => i !== index)
+      }
+    }))
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-background">
@@ -323,6 +362,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="software" className="gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Code className="h-3 w-3" />
               <span className="hidden sm:inline">Software</span>
+            </TabsTrigger>
+            <TabsTrigger value="terms" className="gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <FileText className="h-3 w-3" />
+              <span className="hidden sm:inline">Terms</span>
             </TabsTrigger>
           </TabsList>
 
@@ -781,6 +824,70 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
+            </div>
+          </TabsContent>
+
+          {/* Terms & Conditions Tab */}
+          <TabsContent value="terms" className="mt-0">
+            <div className="rounded-xl border border-border bg-card p-4 md:p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-sm font-semibold md:text-base">Terms & Conditions</h2>
+                <Button size="sm" onClick={addTermsSection} className="h-8 gap-1.5 text-xs">
+                  <Plus className="h-3.5 w-3.5" />
+                  Add Section
+                </Button>
+              </div>
+              
+              <div className="mb-4 space-y-2">
+                <Label htmlFor="lastUpdated" className="text-xs">Last Updated</Label>
+                <Input
+                  id="lastUpdated"
+                  value={editedContent.terms?.lastUpdated || ""}
+                  onChange={(e) => updateTermsLastUpdated(e.target.value)}
+                  placeholder="e.g., January 2024"
+                  className="h-9 text-sm md:w-1/2"
+                />
+              </div>
+
+              <Accordion type="multiple" className="space-y-2">
+                {editedContent.terms?.sections?.map((section, index) => (
+                  <AccordionItem key={index} value={`terms-${index}`} className="rounded-lg border border-border bg-secondary/30 px-3">
+                    <AccordionTrigger className="py-3 text-sm hover:no-underline">
+                      <span className="text-left">{section.title}</span>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-3">
+                      <div className="space-y-3">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs">Section Title</Label>
+                          <Input
+                            value={section.title}
+                            onChange={(e) => updateTermsSection(index, "title", e.target.value)}
+                            className="h-8 text-sm"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs">Content</Label>
+                          <Textarea
+                            value={section.content}
+                            onChange={(e) => updateTermsSection(index, "content", e.target.value)}
+                            rows={4}
+                            className="text-sm"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeTermsSection(index)}
+                        className="mt-3 h-7 gap-1 text-xs text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        Remove Section
+                      </Button>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
           </TabsContent>
         </Tabs>

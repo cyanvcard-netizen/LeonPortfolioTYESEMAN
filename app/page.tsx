@@ -94,7 +94,7 @@ export default function Portfolio() {
                 >
                   {/* Profile Picture - Creative circular design */}
                   <div className="relative mb-3 md:mb-4">
-                    <div className="relative h-20 w-20 md:h-24 md:w-24">
+                    <div className="relative h-40 w-40 md:h-48 md:w-48">
                       {/* Outer decorative ring */}
                       <svg className="absolute inset-0 h-full w-full animate-spin" style={{ animationDuration: '15s' }}>
                         <circle 
@@ -117,7 +117,7 @@ export default function Portfolio() {
                         />
                       </div>
                       {/* Status indicator */}
-                      <div className="absolute bottom-0.5 right-0.5 h-3.5 w-3.5 rounded-full border-2 border-background bg-emerald-500 md:h-4 md:w-4" />
+                      <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-background bg-emerald-500 md:h-6 md:w-6" />
                     </div>
                   </div>
                   
